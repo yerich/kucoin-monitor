@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    kucoin-monitor-server:
+        extends:
+            file: docker-compose.yml
+            service: kucoin-monitor-server
+        ports:
+          - 80:8080
+        environment:
+            NODE_ENV: production
+        command: node server/server.js

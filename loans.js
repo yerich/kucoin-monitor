@@ -1,14 +1,27 @@
 const kucoinAPI = require('kucoin-node-sdk');
 const AWS = require('aws-sdk');
 const config = require('./config');
-
-var credentials = new AWS.SharedIniFileCredentials({profile: config.aws.credentialProfile});
-AWS.config.credentials = credentials;
-AWS.config.update({region: 'REGION'});
-kucoinAPI.init(config.kucoinAPI);
-
-const Datastore = require('nedb');
 const fs = require('fs');
+
+var credentials = new AWS.Credentials({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_DEFAULT_REGION 
+});
+AWS.config.update({
+    region: config.aws.region,
+    credentials: credentials
+});
+kucoinAPI.init({
+    baseUrl: process.env.KUCOIN_API_BASEURL,
+    apiAuth: {
+        key: process.env.KUCOIN_API_KEY,
+        secret: process.env.KUCOIN_API_SECRET,
+        passphrase: process.env.KUCOIN_API_PASSPHRASE,
+    },
+    authVersion: 2,
+});
+
 
 const getPaginatedResults = async (fn, params, max=null) => {
     const currentPage = 1;
@@ -17,7 +30,7 @@ const getPaginatedResults = async (fn, params, max=null) => {
         try {
             let result = await fn({currentPage, ...params});
             allItems = [...allItems, ...result.data.items];
-            if (currentPage < result.data.totalPage) {
+            if (currentPage < result.data.totalPage && (!max || currentPage <= max)) {
                 currentPage += 1;
             } else {
                 break;
