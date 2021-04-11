@@ -1,0 +1,9 @@
+{
+    "name": "kucoin-monitor",
+    "version": "0.1.0",
+    "license": "MIT",
+    "dependencies": {
+        "aws-sdk": "^2.884.0",
+        "kucoin-node-sdk": "^1.0.3"
+    }
+}
