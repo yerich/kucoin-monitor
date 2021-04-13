@@ -2,10 +2,16 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 
+const kucoin = require("../lib/kucoin");
+const AWS = require("../lib/aws");
+
 const port = 8080;
 
-router.get('/', function(req, res){
-    res.send("Hello, world!");
+router.get('/', async function(req, res){
+
+    const accountLendRecord = await kucoin.rest.Margin.BorrowAndLend.getAccountLendRecord("USDT");
+
+    res.json(accountLendRecord);
 });
 
 app.use('/', router);

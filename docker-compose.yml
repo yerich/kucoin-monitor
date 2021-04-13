@@ -17,6 +17,17 @@ services:
         networks:
           - app-network
         command: /home/node/app/node_modules/.bin/nodemon server/server.js
+    kucoin-monitor-scripts:
+        build:
+            context: .
+            dockerfile: scripts/Dockerfile
+        image: kucoin-monitor-scripts
+        container_name: kucoin-monitor-scripts
+        restart: unless-stopped
+        env_file: .env
+        ports:
+          - "9000:8080"
+        command: "scripts/loanMarketData.handler"
 
 networks:
     app-network:

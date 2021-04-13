@@ -1,17 +1,6 @@
 const kucoinAPI = require('kucoin-node-sdk');
-const AWS = require('aws-sdk');
-const config = require('./config');
 const fs = require('fs');
 
-var credentials = new AWS.Credentials({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_DEFAULT_REGION 
-});
-AWS.config.update({
-    region: config.aws.region,
-    credentials: credentials
-});
 kucoinAPI.init({
     baseUrl: process.env.KUCOIN_API_BASEURL,
     apiAuth: {
@@ -21,26 +10,6 @@ kucoinAPI.init({
     },
     authVersion: 2,
 });
-
-
-const getPaginatedResults = async (fn, params, max=null) => {
-    const currentPage = 1;
-    let allItems = [];
-    while (true) {
-        try {
-            let result = await fn({currentPage, ...params});
-            allItems = [...allItems, ...result.data.items];
-            if (currentPage < result.data.totalPage && (!max || currentPage <= max)) {
-                currentPage += 1;
-            } else {
-                break;
-            }
-        } catch (e) {
-            throw e;
-        }
-    }
-    return allItems;
-}
 
 const main = async () => {
     let loansDb;
