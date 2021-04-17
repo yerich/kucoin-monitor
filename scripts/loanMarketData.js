@@ -47,3 +47,7 @@ exports.handler = async (event) => {
         statusCode: 200,
     };
 };
+
+if (!process.env.LAMBDA_TASK_ROOT && require.main === module) {
+    main();
+}

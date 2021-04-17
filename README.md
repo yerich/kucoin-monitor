@@ -13,4 +13,6 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml build kucoin-mon
 docker tag kucoin-monitor-scripts:latest "${aws_id}.dkr.ecr.us-east-1.amazonaws.com/kucoin-monitor-scripts:latest"
 
 docker push "${aws_id}.dkr.ecr.us-east-1.amazonaws.com/kucoin-monitor-scripts:latest"
+
+aws lambda update-function-code --function-name 
 ```
