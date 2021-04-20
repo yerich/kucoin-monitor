@@ -65,8 +65,6 @@ const deployScripts = async () => {
     await spawnSync(`docker-compose`, [
         "-f", 
         path.join(__dirname, "../docker-compose.yml"), 
-        "-f", 
-        path.join(__dirname, "../docker-compose.prod.yml"), 
         "build", 
         "kucoin-monitor-scripts"
     ]);

@@ -1,38 +1,25 @@
-version: '3'
+version: '3.4'
 
 services:
-    kucoin-monitor-server:
-        build:
-          context: .
-          dockerfile: server/Dockerfile
-        image: kucoin-monitor-server
-        container_name: kucoin-monitor-server
-        restart: unless-stopped
-        env_file: .env
-        ports:
-          - "8883:8080"
-        volumes:
-          - .:/home/node/app
-          - node_modules:/home/node/app/node_modules
-        networks:
-          - app-network
-        command: /home/node/app/node_modules/.bin/nodemon server/server.js
-    kucoin-monitor-scripts:
-        build:
-            context: .
-            dockerfile: scripts/Dockerfile
-        image: kucoin-monitor-scripts
-        container_name: kucoin-monitor-scripts
-        restart: unless-stopped
-        env_file: .env
-        ports:
-          - "9000:8080"
-        command: "scripts/loanMarketData.handler"
+  kucoin-monitor-server:
+    image: server
+    build:
+      context: server
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "./bin/www"]
 
-networks:
-    app-network:
-        driver: bridge
-    
-volumes:
-    dbdata:
-    node_modules:
+  kucoin-monitor-scripts:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile
+    image: kucoin-monitor-scripts
+    container_name: kucoin-monitor-scripts
+    restart: unless-stopped
+    ports:
+      - "9000:8080"
+    command: "scripts/loanMarketData.handler"

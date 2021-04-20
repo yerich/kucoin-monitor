@@ -1,10 +1,13 @@
-FROM node:14
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-COPY package*.json ./
-USER node
-RUN npm install
-COPY --chown=node:node . .
-EXPOSE 8080
+FROM node:12.18-alpine
 
-CMD [ "node", "server.js" ]
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY package.json ./
+
+RUN npm install --production --silent
+
+COPY server server
+COPY lib /usr/src/app/lib
+
+EXPOSE 3000
+CMD [ "node", "server/bin/www" ]
