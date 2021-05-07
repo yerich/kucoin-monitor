@@ -5,15 +5,16 @@
     "dependencies": {
         "cookie-parser": "~1.4.4",
         "debug": "~2.6.9",
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
-        "hbs": "~4.0.4",
+        "googleapis": "^71.0.0",
+        "hbs": "^4.1.2",
         "http-errors": "~1.6.3",
         "kucoin-node-sdk": "^1.0.3",
         "morgan": "~1.9.1"
     },
     "devDependencies": {
         "aws-sdk": "^2.884.0",
-        "dotenv": "^8.2.0",
         "nodemon": "^2.0.7"
     }
 }

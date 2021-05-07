@@ -1,18 +1,30 @@
 # kucoin-monitor
 
-Simple script to get and save market data for Kucoin lending
+A script to monitor cryptocurrency lending on the [Kucoin](https://kucoin.com/) cryptocurrency exchange.
+
+A personal exercise for the following:
+
+- Bootstraping an Express.js server with a React-based FE
+- Generating Docker images from scratch (using Dockerfiles and docker-compose)
+- Supporting fast local development as well as containerized deployment
+- Automated deployment onto AWS Lambda for cron scripts
+- Using DynamoDB and the AWS SDK
 
 
-## Deployment
+## Environment
+
+Create a `.env` file in the project root after cloning with the following configuration:
 
 ```
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${aws_id}.dkr.ecr.us-east-1.amazonaws.com"
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=...
+AWS_REGION=...
+AWS_ACCOUNT_ID=...
+KUCOIN_API_BASEURL=...
+KUCOIN_API_KEY=...
+KUCOIN_API_SECRET=...
+KUCOIN_API_PASSPHRASE=...
+ENV_FILE_LOADED=1
 
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml build kucoin-monitor-scripts
-
-docker tag kucoin-monitor-scripts:latest "${aws_id}.dkr.ecr.us-east-1.amazonaws.com/kucoin-monitor-scripts:latest"
-
-docker push "${aws_id}.dkr.ecr.us-east-1.amazonaws.com/kucoin-monitor-scripts:latest"
-
-aws lambda update-function-code --function-name 
 ```
