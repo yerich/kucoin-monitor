@@ -1,4 +1,77 @@
-.app-wrapper {
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.app-wrapper { margin: 0 auto; }
+h1 { font-size: 26px; font-weight: normal; margin-bottom: 20px;}
+p { margin-bottom: 20px; }
+
+.app-header {
+  background-color: #252a25;
+  color: #FFF;
+
+  .app-header-inner {
+    display: flex;
+    flex-direction: row;
+    padding: 30px 0 10px;
+    max-width: 860px;
+    margin: 0 auto;
+
+    .app-header-title {
+      flex: 1;
+
+      a {
+        font-size: 26px;
+        color: #24AE8F;
+        &:hover {text-decoration: none;}
+      }
+    }
+
+    .app-header-login {
+      flex-basis: 200px;
+      flex-grow: 0;
+      text-align: right;
+      align-self: flex-end;
+
+      .logout {
+        border: 0;
+        display: inline-block;
+        margin: 0 0 0 10px;
+        padding: 0;
+        background: none;
+        font-size: inherit;
+        color: #FFF;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  a {
+    color: #FFF;
+  }
+}
+
+.content {
   max-width: 860px;
   margin: 40px auto;
+}
+
+.stat-item {
+  font-size: 18px;
+  margin-bottom: 5px;
+  span { display: inline-block; min-width: 200px;}
+}
+
+.live-earnings {
+  font-size: 18px;
+  margin-bottom: 20px;
+  .live-earnings-amount { font-size: 26px; font-weight: bold; margin: 3px 0;}
 }

@@ -1,40 +1,39 @@
 import React, {useEffect, useState} from "react";
 import {
-  useLocation,
   Redirect,
+  Link,
 } from "react-router-dom";
+import {useAuth} from "../utils/auth";
+import {useQuery} from "../utils/query";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+export function GoogleOAuth() {
+  const query = useQuery();
+  const auth = useAuth();
 
-export default function GoogleOAuth() {
-  let query = useQuery();
+  const code = query.get("code");
+  const scope = query.get("scope");
 
-  let code = query.get("code");
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
-  useEffect(async () => {
-    if (code) {
-      const result = await fetch("/api/login/google-auth-response", {
-        method: "POST",
-        body: JSON.stringify({
-          code: query.get("code"),
-          scope: query.get("scope"),
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await result.json();
-      console.log("Login result:", data);
+  useEffect(() => {
+    async function tryLogin () {
+      const loginResult = await auth.googleSignIn(code, scope);
+      if (loginResult) {
+        setLoginSuccess(true);
+      } else {
+        setLoginFailed(true);
+      }
     }
-  }, [code]);
+    tryLogin();
+  }, [auth, code, scope]);
 
-  if (!code) {
-    return <Redirect to={{path: "/"}} />
+  if (!code || loginSuccess) {
+    return <Redirect to="/" />;
   }
 
   return <div>
-    <h1>Please wait...</h1>
+    {loginFailed && <p>Unauthorized user <Link to="/">Back to homepage</Link></p>}
+    {!loginFailed && !loginSuccess && <h1>Please wait...</h1>}
   </div>;
 }

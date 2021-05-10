@@ -91,8 +91,45 @@ async function startSessionFromGoogleOAuthCode(code, res) {
   }
 }
 
+async function checkSession(req, res, next) {
+  const sessionId = req.cookies.sessionId;
+
+  if (!sessionId) {
+    res.statusCode(401);
+    res.json({error: "Login required"});
+    return;
+  }
+
+  const result = await dynamoDBClient.query({
+    TableName: "sessions",
+    KeyConditionExpression: "session_id = :a",
+    ExpressionAttributeValues: {
+      ":a": sessionId,
+    },
+  }).promise();
+
+  if (!result || !result.Items || !result.Items[0] || !result.Items[0].email) {
+    res.statusCode(401);
+    res.json({error: "Login required"});
+  } else {
+    req.sessionInfo = result.Items[0];
+    next();
+  }
+}
+
+async function deleteSession(sessionId) {
+  return await dynamoDBClient.delete({
+    TableName: "sessions",
+    Key: {
+      "session_id": sessionId
+    },
+  }).promise();
+}
+
 module.exports = {
   getGoogleSignInUrl,
   getGoogleAccountFromCode,
   startSessionFromGoogleOAuthCode,
+  checkSession,
+  deleteSession,
 }
