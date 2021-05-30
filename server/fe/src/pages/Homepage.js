@@ -27,6 +27,7 @@ function aggregateLoanData(data) {
     totalInterest: parseFloat(usdtLendRecord.accruedInterest) + parseFloat(usdtLendRecord.realizedProfit),
     totalActiveLoans,
     averageDailyIntRate,
+    averageAnnualIntRate: Math.pow(1 + averageDailyIntRate, 365) - 1,
     dailyTotalInterest,
     startTime: Date.now(),
   }
@@ -78,7 +79,8 @@ export function Homepage() {
 
     <div className="stat-item"><span>Total loan amount</span> ${rounded(aggregatedLoanData.total, 2, true)}</div>
     <div className="stat-item"><span>Open orders</span> ${rounded(aggregatedLoanData.outstanding, 2, true)}</div>
-    <div className="stat-item"><span>Average interest rate</span> {rounded(aggregatedLoanData.averageDailyIntRate * 100, 5)}%</div>
+    <div className="stat-item"><span>Average daily rate</span> {rounded(aggregatedLoanData.averageDailyIntRate * 100, 5)}%</div>
+    <div className="stat-item"><span>Average annual APY</span> {rounded(aggregatedLoanData.averageAnnualIntRate * 100, 2)}%</div>
     <div className="stat-item"><span>Daily interest</span> ${rounded(aggregatedLoanData.dailyTotalInterest, 2, true)}</div>
     <div className="stat-item"><span>Total earnings (not live)</span> ${rounded(aggregatedLoanData.totalInterest, 2, true)}</div>
   </div>;

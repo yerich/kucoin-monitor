@@ -2,24 +2,31 @@ version: '3.4'
 
 services:
   kucoin-monitor-server:
-    image: server
+    image: yerich/kucoin-monitor-server
     build:
       context: .
       dockerfile: ./server/Dockerfile
     environment:
       NODE_ENV: production
+    env_file: .env
     ports:
       - 8080:8080
-      - 9229:9229
-    command: ["node", "--inspect=0.0.0.0:9229", "./server/bin/www"]
+    command: ["node", "./server/bin/www"]
+    container_name: kucoin-monitor-server
+    networks:
+      - kucoin-monitor
 
   kucoin-monitor-scripts:
     build:
       context: .
       dockerfile: scripts/Dockerfile
-    image: kucoin-monitor-scripts
+    image: yerich/kucoin-monitor-scripts
     container_name: kucoin-monitor-scripts
     restart: unless-stopped
     ports:
       - "9000:8080"
     command: "scripts/loanMarketData.handler"
+
+networks:
+  kucoin-monitor:
+    name: kucoin-monitor_default

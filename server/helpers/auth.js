@@ -11,7 +11,9 @@ function createConnection() {
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'http://localhost:3000/google-oauth',
+    process.env.NODE_ENV === "development" ?
+      'http://localhost:3000/google-oauth' :
+      process.env.GOOGLE_OAUTH_REDIRECT,
   );
 }
 
